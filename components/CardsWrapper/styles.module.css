@@ -1,4 +1,7 @@
 .main {
   padding: 2rem;
   background-color: bisque;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
