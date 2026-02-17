@@ -2,10 +2,15 @@ import styles from "./styles.module.css";
 
 type HeaderProps = {
   logo: string;
-  links: { title: string; href: string }[];
 };
 
-const Header = ({ logo, links }: HeaderProps) => {
+const Header = ({ logo }: HeaderProps) => {
+  const links = [
+    { title: "About", href: "/about" },
+    { title: "Main", href: "/main" },
+    { title: "Login", href: "/login" },
+  ];
+
   return (
     <header className={styles.main}>
       <div className={styles.logo}>{logo}</div>
