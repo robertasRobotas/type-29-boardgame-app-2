@@ -3,6 +3,8 @@ import styles from "./styles.module.css";
 import LoginForm from "@/components/LoginForm/LoginForm";
 import axios from "axios";
 import { useRouter } from "next/router";
+import cookie from "js-cookie";
+import { userTokenKey } from "@/constants/user";
 
 const Login = () => {
   const router = useRouter();
@@ -22,6 +24,7 @@ const Login = () => {
       });
 
       if (response.status === 200) {
+        cookie.set(userTokenKey, response.data.jwt);
         router.push("/");
       }
 
