@@ -29,7 +29,7 @@ const CardsWrapper = ({ data }: CardsWrapperProps) => {
             }
           })
           .map((d) => {
-            return <BoardGameCard key={d.title} game={d} />;
+            return <BoardGameCard key={d._id} game={d} />;
           })}
     </div>
   );
