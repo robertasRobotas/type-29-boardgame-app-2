@@ -5,17 +5,24 @@ import { useEffect, useState } from "react";
 import { userTokenKey } from "@/constants/user";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Footer from "@/components/Footer/Footer";
+import PageTemplate from "@/components/PageTemplate/PageTemplate";
 
 const Index = () => {
   const router = useRouter();
 
-  const [boardgames, setBoardgames] = useState([]);
+  const [boardgames, setBoardgames] = useState(null);
 
   const validateJwt = async () => {
     const token = cookie.get(userTokenKey);
 
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
     try {
-      const response = await axios.get("http://localhost:3002/jwt/validate", {
+      await axios.get("http://localhost:3002/jwt/validate", {
         headers: {
           Authorization: token,
         },
@@ -46,14 +53,14 @@ const Index = () => {
 
   useEffect(() => {
     validateJwt();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchBoardgames();
   }, []);
 
   return (
-    <>
-      <Header logo={"TYPE 29"} />
+    <PageTemplate>
       <CardsWrapper data={boardgames} />
-    </>
+    </PageTemplate>
   );
 };
 

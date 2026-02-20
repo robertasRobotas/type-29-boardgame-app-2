@@ -1,3 +1,8 @@
+.main {
+  padding-top: 3rem;
+  text-align: center;
+}
+
 .form {
   width: 50%;
   display: flex;
@@ -14,4 +19,8 @@
 .form button {
   padding: 0.4rem;
   border-radius: 4px;
+}
+
+.title {
+  margin-bottom: 2rem;
 }

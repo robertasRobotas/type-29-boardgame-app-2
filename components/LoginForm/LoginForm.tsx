@@ -16,7 +16,9 @@ const LoginForm = ({
   onFormSubmit,
 }: LoginFormProps) => {
   return (
-    <div>
+    <div className={styles.main}>
+      <h1 className={styles.title}>Login</h1>
+
       <div className={styles.form}>
         <input
           type="email"
