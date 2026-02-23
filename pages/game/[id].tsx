@@ -17,9 +17,6 @@ const Game = () => {
 
   const fetchBoardgame = async (id: string) => {
     try {
-      setIsLoading(true);
-      setError(null);
-
       const token = cookies.get(userTokenKey);
       const response = await axios.get(
         `http://localhost:3002/boardgames/${id}`,
@@ -53,10 +50,32 @@ const Game = () => {
     return clamp(boardgame.rating, 0, 10);
   }, [boardgame]);
 
+  const saveBoardgame = async () => {
+    try {
+      const token = cookies.get(userTokenKey);
+
+      const result = await axios.post(
+        "http://localhost:3002/user/save/boardgame",
+        { boardgameId: router.query.id },
+        {
+          headers: {
+            Authorization: token,
+          },
+        },
+      );
+
+      if (result.status === 200) {
+        fetchBoardgame(router.query.id as string);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        {isLoading && <div className={styles.state}>Loading…</div>}
+        {/* {isLoading && <div className={styles.state}>Loading…</div>} */}
 
         {!isLoading && error && (
           <div className={styles.stateError}>{error}</div>
@@ -164,9 +183,13 @@ const Game = () => {
               <button
                 className={styles.primaryBtn}
                 type="button"
-                onClick={() => alert("TODO: add to list")}
+                onClick={() => saveBoardgame()}
               >
-                Add to list
+                {boardgame.isSavedToUser ? (
+                  <>Remove from list</>
+                ) : (
+                  <>Add to list</>
+                )}
               </button>
             </footer>
           </article>

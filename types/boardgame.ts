@@ -14,4 +14,5 @@ export type BoardGame = {
   ratingsCount: number;
   minPlayingTime: number;
   maxPlayingTime: number | null;
+  isSavedToUser: boolean;
 };
