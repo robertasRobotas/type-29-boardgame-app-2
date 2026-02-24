@@ -1,12 +1,11 @@
 import cookie from "js-cookie";
 import CardsWrapper from "@/components/CardsWrapper/CardsWrapper";
-import Header from "@/components/Header/Header";
 import { useEffect, useState } from "react";
 import { userTokenKey } from "@/constants/user";
 import { useRouter } from "next/router";
-import axios from "axios";
-import Footer from "@/components/Footer/Footer";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
+import { validateJwtToken } from "@/api/user";
+import { getAllBoardgames } from "@/api/boardgames";
 
 const Index = () => {
   const router = useRouter();
@@ -22,15 +21,7 @@ const Index = () => {
     }
 
     try {
-      await axios.get("http://localhost:3002/jwt/validate", {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (!token) {
-        router.push("/login");
-      }
+      validateJwtToken(token, router);
     } catch (err) {
       console.log(err);
       router.push("/login");
@@ -39,13 +30,11 @@ const Index = () => {
 
   const fetchBoardgames = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/boardgames", {
-        headers: {
-          Authorization: cookie.get(userTokenKey),
-        },
-      });
-      console.log("response", response);
-      setBoardgames(response.data.boardgames);
+      const token = cookie.get(userTokenKey) as string;
+
+      const response = await getAllBoardgames(token);
+
+      setBoardgames(response?.data.boardgames);
     } catch (err) {
       console.log(err);
     }

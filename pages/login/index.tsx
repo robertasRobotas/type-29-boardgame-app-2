@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import styles from "./styles.module.css";
 import LoginForm from "@/components/LoginForm/LoginForm";
 import axios from "axios";
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
 import { userTokenKey } from "@/constants/user";
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
 import PageTemplate from "@/components/PageTemplate/PageTemplate";
+import { login, validateJwtToken } from "@/api/user";
 
 const Login = () => {
   const router = useRouter();
@@ -19,11 +17,7 @@ const Login = () => {
     const token = cookie.get(userTokenKey);
 
     try {
-      const response = await axios.get("http://localhost:3002/jwt/validate", {
-        headers: {
-          Authorization: token,
-        },
-      });
+      const response = await validateJwtToken(token!);
 
       if (response.status === 200) {
         router.push("/");
@@ -44,9 +38,7 @@ const Login = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:3002/login", {
-        ...data,
-      });
+      const response = await login(data);
 
       if (response.status === 200) {
         cookie.set(userTokenKey, response.data.jwt);

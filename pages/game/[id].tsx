@@ -1,10 +1,10 @@
 import { userTokenKey } from "@/constants/user";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import cookies from "js-cookie";
 import type { BoardGame } from "@/types/boardgame";
 import styles from "./styles.module.css";
+import { getBoardgameById, toggleBoardgame } from "@/api/boardgames";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
@@ -18,14 +18,7 @@ const Game = () => {
   const fetchBoardgame = async (id: string) => {
     try {
       const token = cookies.get(userTokenKey);
-      const response = await axios.get(
-        `http://localhost:3002/boardgames/${id}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        },
-      );
+      const response = await getBoardgameById(token!, id);
 
       console.log("response", response);
 
@@ -37,8 +30,6 @@ const Game = () => {
       setIsLoading(false);
     }
   };
-
-  console.log("boardgame", boardgame);
 
   useEffect(() => {
     const id = router.query.id;
@@ -54,15 +45,7 @@ const Game = () => {
     try {
       const token = cookies.get(userTokenKey);
 
-      const result = await axios.post(
-        "http://localhost:3002/user/save/boardgame",
-        { boardgameId: router.query.id },
-        {
-          headers: {
-            Authorization: token,
-          },
-        },
-      );
+      const result = await toggleBoardgame(token!, router.query.id as string);
 
       if (result.status === 200) {
         fetchBoardgame(router.query.id as string);
