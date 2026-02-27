@@ -17,9 +17,9 @@ const Login = () => {
     const token = cookie.get(userTokenKey);
 
     try {
-      const response = await validateJwtToken(token!);
+      const response = await validateJwtToken(token!, router);
 
-      if (response.status === 200) {
+      if (response?.status === 200) {
         router.push("/");
       }
     } catch (err) {
