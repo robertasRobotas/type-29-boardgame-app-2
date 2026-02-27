@@ -21,7 +21,7 @@ const Index = () => {
     }
 
     try {
-      validateJwtToken(token, router);
+      await validateJwtToken(token, router);
     } catch (err) {
       console.log(err);
       router.push("/login");
@@ -30,7 +30,12 @@ const Index = () => {
 
   const fetchBoardgames = async () => {
     try {
-      const token = cookie.get(userTokenKey) as string;
+      const token = cookie.get(userTokenKey);
+
+      if (!token) {
+        router.push("/login");
+        return;
+      }
 
       const response = await getAllBoardgames(token);
 
